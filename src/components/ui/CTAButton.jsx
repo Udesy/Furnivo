@@ -11,6 +11,7 @@ const CTAButton = ({
   showMenu = false,
   onClick,
   children,
+  isNavigation,
   ...props
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -60,13 +61,13 @@ const CTAButton = ({
         {showMenu ? (
           <div className="relative flex flex-col gap-0.5 items-center justify-center">
             <span
-              className={`w-4 h-0.5 rounded-full bg-black transition-transform duration-300 ease-in-out ${isOpen ? "rotate-45 translate-y-1" : ""}`}
+              className={`w-4 h-0.5 rounded-full bg-black transition-transform duration-300 ease-in-out ${isNavigation ? "rotate-45 translate-y-1" : ""}`}
             ></span>
             <span
-              className={`w-[1rem] h-0.5 rounded-full bg-black transition-all duration-300 ease-in-out ${isOpen ? "scale-x-0 opacity-0" : "scale-x-100 opacity-100"}`}
+              className={`w-[1rem] h-0.5 rounded-full bg-black transition-all duration-300 ease-in-out ${isNavigation ? "scale-x-0 opacity-0" : "scale-x-100 opacity-100"}`}
             ></span>
             <span
-              className={`w-4 h-0.5 rounded-full bg-black transition-transform duration-300 ease-in-out ${isOpen ? "-rotate-45 -translate-y-1" : ""}`}
+              className={`w-4 h-0.5 rounded-full bg-black transition-transform duration-300 ease-in-out ${isNavigation ? "-rotate-45 -translate-y-1" : ""}`}
             ></span>
           </div>
         ) : (

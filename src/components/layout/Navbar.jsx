@@ -58,8 +58,6 @@ const Navbar = () => {
     };
   }, []);
 
-  console.log(isNavigation);
-
   const handleClick = () => {
     setIsNavigation((prev) => !prev);
   };
@@ -74,7 +72,7 @@ const Navbar = () => {
       >
         <div className="backdrop-blur-xs rounded-xl w-full px-[clamp(1rem,calc(0.636rem+1.818vw),2rem)] py-3.5 flex flex-row items-center justify-between transition-colors duration-300 bg-white/20">
           <div className="w-fit h-5 transition-all duration-300">
-            <Logo fillColor={isDark ? "#000000" : "#FFFDFB"} />
+            <Logo fillColor={isDark || isNavigation ? "#000000" : "#FFFDFB"} />
           </div>
           <nav className="w-fit lg:block hidden">
             <ul
@@ -110,6 +108,7 @@ const Navbar = () => {
             className="lg:hidden inline-flex"
             showMenu={true}
             onClick={handleClick}
+            isNavigation={isNavigation}
           />
         </div>
       </header>

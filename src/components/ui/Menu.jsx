@@ -1,8 +1,11 @@
+import { mobile_navigation } from "@/app/constants";
 import clsx from "clsx";
+import Link from "next/link";
 import React, { useLayoutEffect, useState } from "react";
 
 const Menu = ({ isOpen, onClose }) => {
   const [shouldRender, setShouldRender] = useState(false);
+  const lenis = window.lenis;
 
   useLayoutEffect(() => {
     const lenis = window.lenis;
@@ -32,10 +35,31 @@ const Menu = ({ isOpen, onClose }) => {
   return (
     <div
       className={clsx(
-        "bg-black fixed inset-0 h-screen z-50 transition-opacity duration-500",
+        "bg-primary fixed inset-0 h-screen z-50 transition-opacity duration-500 lg:hidden px-8 py-2",
         isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
       )}
-    ></div>
+    >
+      <div className="w-full h-full flex flex-col justify-end gap-y-52">
+        <nav>
+          <ul className="">
+            {mobile_navigation.map(({ id, href, name }) => (
+              <li key={id}>
+                <Link
+                  href={href}
+                  className="text-[clamp(48px,calc(44.293px+0.976vw),56px)]"
+                  onClick={() => onClose()}
+                >
+                  {name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <div className="w-full flex justify-center text-sm">
+          <h6>© 2025 Furnivo. All rights reserved.</h6>
+        </div>
+      </div>
+    </div>
   );
 };
 

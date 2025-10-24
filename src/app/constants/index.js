@@ -351,6 +351,25 @@ export const navigation = [
   },
 ];
 
+export const mobile_navigation = [
+  { id: 0, href: "#Hero", name: "Home" },
+  {
+    id: 1,
+    href: "#About",
+    name: "About",
+  },
+  {
+    id: 2,
+    href: "#Product",
+    name: "Product",
+  },
+  {
+    id: 3,
+    href: "#Gallery",
+    name: "Gallery",
+  },
+];
+
 export const customer_support = [
   {
     id: 0,

@@ -1,0 +1,15 @@
+# Furnivo Robots.txt
+# https://furnivo.com/robots.txt
+
+User-agent: *
+Allow: /
+
+# Disallow access to Sanity Studio
+Disallow: /studio/
+
+# Disallow access to API routes (if any)
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://furnivo.com/sitemap.xml
+

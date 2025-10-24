@@ -9,7 +9,7 @@ import { about_content } from "@/app/constants";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-const About = () => {
+const About = ({ data }) => {
   const sectionRef = useRef(null);
   const timelineRef = useRef(null);
   const textRef = useRef(null);
@@ -24,7 +24,7 @@ const About = () => {
       gsap.to(textSplit.lines, {
         yPercent: 0,
         opacity: 1,
-        duration: 1.5,
+        duration: 1.2,
         ease: "power2.out",
         stagger: 0.03,
         scrollTrigger: {
@@ -130,6 +130,8 @@ const About = () => {
     return () => ctx.revert();
   }, []);
 
+  console.log(data);
+
   return (
     <section ref={sectionRef} className="section-padding" id="About">
       <div className="flex flex-col gap-[clamp(2rem,calc(1.273rem+3.636vw),4rem)]">
@@ -152,52 +154,43 @@ const About = () => {
           <div className="col col-1">
             <div className="col-content">
               <div className="col-content-wrapper">
-                <h1 className="about-heading-1">{about_content[0].h1}</h1>
-                <p className="about-body">{about_content[0].p}</p>
+                <h1 className="about-heading-1">{data[0].title}</h1>
+                <p className="about-body">{data[0].subText}</p>
               </div>
             </div>
           </div>
           <div className="col col-2">
             <div className="col-img col-img-1">
               <div className="col-img-wrapper">
-                <img
-                  src="/images/about-section/image-1.jpg"
-                  alt="About image 1"
-                />
+                <img src={data[0].src} alt="About image 1" />
               </div>
             </div>
             <div className="col-img col-img-2">
               <div className="col-img-wrapper">
-                <img
-                  src="/images/about-section/image-2.jpg"
-                  alt="About image 2"
-                />
+                <img src={data[1].src} alt="About image 2" />
               </div>
             </div>
           </div>
           <div className="col col-3">
             <div className="col-content-wrapper">
-              <h1 className="about-heading-1">{about_content[1].h1}</h1>
-              <p className="about-body">{about_content[1].p}</p>
+              <h1 className="about-heading-1">{data[1].title}</h1>
+              <p className="about-body">{data[1].subText}</p>
             </div>
             <div className="col-content-wrapper-2">
-              <h1 className="about-heading-1">{about_content[2].h1}</h1>
-              <p className="about-body">{about_content[2].p}</p>
+              <h1 className="about-heading-1">{data[2].title}</h1>
+              <p className="about-body">{data[2].subText}</p>
             </div>
           </div>
           <div className="col col-4">
             <div className="col-img">
               <div className="col-img-wrapper">
-                <img
-                  src="/images/about-section/image-3.jpg"
-                  alt="About image 3"
-                />
+                <img src={data[2].src} alt="About image 3" />
               </div>
             </div>
           </div>
         </div>
       </div>
-      <Mobile_About content={about_content} />
+      <Mobile_About data={data} />
     </section>
   );
 };

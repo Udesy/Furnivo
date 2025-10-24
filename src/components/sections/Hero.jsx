@@ -56,7 +56,10 @@ export default function Hero({ previewData }) {
   }, []);
 
   return (
-    <section className="relative h-svh p-space-md rounded-b-2xl overflow-hidden">
+    <section
+      className="relative h-svh p-space-md rounded-b-2xl overflow-hidden"
+      id="Hero"
+    >
       <div className="inset-0 absolute w-full h-full -z-10 bg-black">
         <div
           className="relative h-full w-full bg-black will-change-transform transition-transform scale-120 opacity-0"

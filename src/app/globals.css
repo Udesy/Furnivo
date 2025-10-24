@@ -52,6 +52,7 @@ body {
   height: 1.5px;
   background-color: var(--line-color, #ffffff);
   transition: width 0.3s ease;
+  border-radius: 100%;
 }
 .hover:hover::after {
   width: 100%;
