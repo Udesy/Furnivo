@@ -131,7 +131,7 @@ export default function Product({ data }) {
               enabled={enabled}
               minDistance={30}
               maxDistance={100}
-              enableDamping={100}
+              enableDamping={true}
               dampingFactor={0.05}
               touches={{
                 ONE: 2,
