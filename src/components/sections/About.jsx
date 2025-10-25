@@ -130,8 +130,6 @@ const About = ({ data }) => {
     return () => ctx.revert();
   }, []);
 
-  console.log(data);
-
   return (
     <section ref={sectionRef} className="section-padding" id="About">
       <div className="flex flex-col gap-[clamp(2rem,calc(1.273rem+3.636vw),4rem)]">
