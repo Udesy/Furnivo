@@ -29,18 +29,42 @@ export default function Product({ data }) {
   const [enabled, setEnabled] = useState(false);
   const [path, setPath] = useState(data?.[0].modelFile || null);
   const [model, setModel] = useState(data?.[0] || null);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const textRef = useRef(null);
   const sectionRef = useRef(null);
+  const canvasContainerRef = useRef(null);
 
   const handleClick = (selectedModel) => {
     setModel(selectedModel);
     setPath(selectedModel.modelFile);
   };
   useEffect(() => {
-    const isTouchDevice =
-      "ontouchstart" in window || navigator.maxTouchPoints > 0;
-    if (isTouchDevice) {
-      setEnabled(true);
+    const hasTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    setIsTouchDevice(hasTouch);
+
+    if (hasTouch && canvasContainerRef.current) {
+      const handleTouchStart = () => {
+        setEnabled(true);
+      };
+
+      const handleTouchEnd = () => {
+        setTimeout(() => {
+          setEnabled(false);
+        }, 100);
+      };
+
+      const container = canvasContainerRef.current;
+      container.addEventListener("touchstart", handleTouchStart, {
+        passive: false,
+      });
+      container.addEventListener("touchend", handleTouchEnd, {
+        passive: false,
+      });
+
+      return () => {
+        container.removeEventListener("touchstart", handleTouchStart);
+        container.removeEventListener("touchend", handleTouchEnd);
+      };
     }
   }, []);
   useLayoutEffect(() => {
@@ -88,10 +112,11 @@ export default function Product({ data }) {
       </div>
       <div className="w-full h-fit flex lg:flex-row flex-col gap-[clamp(2rem,calc(-9.636rem+18.182vw),4rem)] mt-[clamp(48px,calc(36.364px+3.636vi),80px)] bg-primary px-[clamp(1.5rem,calc(0.773rem+3.636vi),3.5rem)] py-[clamp(2.5rem,calc(1.955rem+2.727vw),4rem)]">
         <div
+          ref={canvasContainerRef}
           className="lg:h-[42rem] md:h-[36rem] h-[24rem] w-full bg-secondary overflow-hidden rounded-[10px]"
           style={{ cursor: grabbing ? "grabbing" : "grab" }}
-          onMouseEnter={() => setEnabled(true)}
-          onMouseLeave={() => setEnabled(false)}
+          onMouseEnter={() => !isTouchDevice && setEnabled(true)}
+          onMouseLeave={() => !isTouchDevice && setEnabled(false)}
         >
           <Canvas
             style={{ touchAction: "none" }}
