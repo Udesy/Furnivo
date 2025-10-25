@@ -21,7 +21,7 @@ const montserrat = localFont({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://furnivo.com"), // Update with your actual domain
+  metadataBase: new URL("https://furnivo-gold.vercel.app/"), // Update with your actual domain
   title: {
     default:
       "Furnivo - Modern Furniture & Home Decor | Stylish Living Solutions",
@@ -69,7 +69,7 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://furnivo.com",
+    url: "https://furnivo-gold.vercel.app",
     siteName: "Furnivo",
     title: "Furnivo - Modern Furniture & Home Decor",
     description:
@@ -114,7 +114,7 @@ export const metadata = {
     // bing: "your-bing-verification-code",
   },
   alternates: {
-    canonical: "https://furnivo.com",
+    canonical: "https://furnivo-gold.vercel.app/",
   },
   category: "furniture",
 };
