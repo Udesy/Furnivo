@@ -24,9 +24,9 @@ const About = ({ data }) => {
       gsap.to(textSplit.lines, {
         yPercent: 0,
         opacity: 1,
-        duration: 1.2,
+        duration: 1,
         ease: "power2.out",
-        stagger: 0.03,
+        stagger: 0.07,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top 60%",
