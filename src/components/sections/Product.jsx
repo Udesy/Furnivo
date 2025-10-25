@@ -40,7 +40,7 @@ export default function Product({ data }) {
         opacity: 1,
         duration: 1.2,
         ease: "power1.in",
-        stagger: 0.1,
+        stagger: 0.03,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top 60%",
