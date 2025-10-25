@@ -34,18 +34,18 @@ const Menu = ({ isOpen, onClose }) => {
   return (
     <div
       className={clsx(
-        "bg-primary fixed inset-0 h-screen z-50 transition-opacity duration-500 lg:hidden px-8 py-2",
+        "bg-primary fixed inset-0 h-svh z-50 transition-opacity duration-500 lg:hidden px-8 py-2",
         isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
       )}
     >
-      <div className="w-full h-full flex flex-col justify-end gap-y-52">
-        <nav>
-          <ul className="">
+      <div className="w-full h-full flex flex-col justify-between gap-y-52">
+        <nav className=" h-full flex items-end">
+          <ul className="flex flex-col">
             {mobile_navigation.map(({ id, href, name }) => (
               <li key={id}>
                 <Link
                   href={href}
-                  className="text-[clamp(48px,calc(44.293px+0.976vw),56px)]"
+                  className="text-[clamp(2.00rem,calc(1.305rem+2.927vw),3.50rem)]"
                   onClick={() => onClose()}
                 >
                   {name}
@@ -54,7 +54,7 @@ const Menu = ({ isOpen, onClose }) => {
             ))}
           </ul>
         </nav>
-        <div className="w-full flex justify-center text-sm">
+        <div className="w-full flex justify-center text-[clamp(0.75rem,calc(0.692rem+0.244vw),0.88rem)]">
           <h6>© 2025 Furnivo. All rights reserved.</h6>
         </div>
       </div>
