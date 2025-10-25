@@ -26,7 +26,7 @@ function Model({ model }) {
 export default function Product({ data }) {
   const controlRef = useRef(null);
   const [grabbing, setGrabbing] = useState(false);
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(true);
   const [path, setPath] = useState(data?.[0].modelFile || null);
   const [model, setModel] = useState(data?.[0] || null);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
