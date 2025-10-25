@@ -5,7 +5,6 @@ import React, { useLayoutEffect, useState } from "react";
 
 const Menu = ({ isOpen, onClose }) => {
   const [shouldRender, setShouldRender] = useState(false);
-  const lenis = window.lenis;
 
   useLayoutEffect(() => {
     const lenis = window.lenis;
