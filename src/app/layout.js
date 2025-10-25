@@ -21,13 +21,29 @@ const montserrat = localFont({
 });
 
 export const metadata = {
-  metadataBase: new URL('https://furnivo.com'), // Update with your actual domain
+  metadataBase: new URL("https://furnivo.com"), // Update with your actual domain
   title: {
-    default: "Furnivo - Modern Furniture & Home Decor | Stylish Living Solutions",
-    template: "%s | Furnivo"
+    default:
+      "Furnivo - Modern Furniture & Home Decor | Stylish Living Solutions",
+    template: "%s | Furnivo",
   },
   description:
     "Discover Furnivo's collection of stylish, high-quality furniture crafted for comfort and timeless elegance. Transform your living space with our modern sofas, chairs, and home decor.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "32x32" },
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      {
+        url: "/icons/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+    shortcut: "/favicon.ico",
+  },
   keywords: [
     "furniture",
     "modern furniture",
@@ -40,7 +56,7 @@ export const metadata = {
     "contemporary furniture",
     "interior design",
     "home furnishings",
-    "quality furniture"
+    "quality furniture",
   ],
   authors: [{ name: "Furnivo" }],
   creator: "Furnivo",
