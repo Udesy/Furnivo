@@ -11,5 +11,5 @@ Disallow: /studio/
 Disallow: /api/
 
 # Sitemap location
-Sitemap: https://furnivo.com/sitemap.xml
+Sitemap: https://furnivo-gold.vercel.app/sitemap.xml
 

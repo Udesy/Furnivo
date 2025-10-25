@@ -1,5 +1,5 @@
 export default function sitemap() {
-  const baseUrl = "https://furnivo-gold.vercel.app/"; // Update with your actual domain
+  const baseUrl = "https://furnivo-gold.vercel.app/";
 
   return [
     {
