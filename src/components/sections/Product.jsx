@@ -1,6 +1,12 @@
 "use client";
 
-import React, { Suspense, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  Suspense,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Html } from "@react-three/drei";
 import Image from "next/image";
@@ -30,7 +36,13 @@ export default function Product({ data }) {
     setModel(selectedModel);
     setPath(selectedModel.modelFile);
   };
-
+  useEffect(() => {
+    const isTouchDevice =
+      "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    if (isTouchDevice) {
+      setEnabled(true);
+    }
+  }, []);
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const textSplit = new SplitText(textRef.current, { type: "lines" });
@@ -82,6 +94,7 @@ export default function Product({ data }) {
           onMouseLeave={() => setEnabled(false)}
         >
           <Canvas
+            style={{ touchAction: "none" }}
             camera={{ position: [0, 40, 80], fov: 45 }}
             onPointerDown={() => setGrabbing(true)}
             onPointerUp={() => setGrabbing(false)}
@@ -118,6 +131,12 @@ export default function Product({ data }) {
               enabled={enabled}
               minDistance={30}
               maxDistance={100}
+              enableDamping={100}
+              dampingFactor={0.05}
+              touches={{
+                ONE: 2,
+                TWO: 3,
+              }}
             />
           </Canvas>
         </div>
