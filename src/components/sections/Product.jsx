@@ -446,12 +446,14 @@ function Model({ model }) {
   return <primitive object={scene} scale={model.scale} />;
 }
 
-// Manual touch-enabled controls
+// Manual touch-enabled controls with smooth damping
 function ManualControls() {
   const { camera, gl } = useThree();
   const [isRotating, setIsRotating] = useState(false);
   const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
   const rotationRef = useRef({ x: 0, y: 0 });
+  const targetRotationRef = useRef({ x: 0, y: 0 }); // Smooth target
+  const velocityRef = useRef({ x: 0, y: 0 }); // For inertia
 
   useEffect(() => {
     const canvas = gl.domElement;
@@ -461,6 +463,7 @@ function ManualControls() {
       setIsRotating(true);
       const touch = e.touches[0];
       setLastPosition({ x: touch.clientX, y: touch.clientY });
+      velocityRef.current = { x: 0, y: 0 }; // Reset velocity
       console.log("👆 Touch START");
     };
 
@@ -472,18 +475,21 @@ function ManualControls() {
       const deltaX = touch.clientX - lastPosition.x;
       const deltaY = touch.clientY - lastPosition.y;
 
-      // Update rotation
-      rotationRef.current.y += deltaX * 0.01;
-      rotationRef.current.x += deltaY * 0.01;
+      // Update target rotation (not actual rotation)
+      targetRotationRef.current.y += deltaX * 0.01;
+      targetRotationRef.current.x += deltaY * 0.01;
+
+      // Store velocity for inertia
+      velocityRef.current.x = deltaY * 0.01;
+      velocityRef.current.y = deltaX * 0.01;
 
       // Clamp vertical rotation
-      rotationRef.current.x = Math.max(
+      targetRotationRef.current.x = Math.max(
         -Math.PI / 2,
-        Math.min(Math.PI / 2, rotationRef.current.x)
+        Math.min(Math.PI / 2, targetRotationRef.current.x)
       );
 
       setLastPosition({ x: touch.clientX, y: touch.clientY });
-      console.log("🖐️ Touch MOVE", deltaX, deltaY);
     };
 
     const handleTouchEnd = (e) => {
@@ -496,6 +502,7 @@ function ManualControls() {
     const handleMouseDown = (e) => {
       setIsRotating(true);
       setLastPosition({ x: e.clientX, y: e.clientY });
+      velocityRef.current = { x: 0, y: 0 };
       console.log("🖱️ Mouse DOWN");
     };
 
@@ -505,12 +512,15 @@ function ManualControls() {
       const deltaX = e.clientX - lastPosition.x;
       const deltaY = e.clientY - lastPosition.y;
 
-      rotationRef.current.y += deltaX * 0.01;
-      rotationRef.current.x += deltaY * 0.01;
+      targetRotationRef.current.y += deltaX * 0.01;
+      targetRotationRef.current.x += deltaY * 0.01;
 
-      rotationRef.current.x = Math.max(
+      velocityRef.current.x = deltaY * 0.01;
+      velocityRef.current.y = deltaX * 0.01;
+
+      targetRotationRef.current.x = Math.max(
         -Math.PI / 2,
-        Math.min(Math.PI / 2, rotationRef.current.x)
+        Math.min(Math.PI / 2, targetRotationRef.current.x)
       );
 
       setLastPosition({ x: e.clientX, y: e.clientY });
@@ -545,8 +555,33 @@ function ManualControls() {
     };
   }, [gl, isRotating, lastPosition]);
 
-  // Apply rotation to camera
+  // Apply smooth rotation with damping
   useFrame(() => {
+    const dampingFactor = 0.1; // Smoothing factor (0.1 = smooth, 1.0 = instant)
+
+    // Smoothly interpolate to target rotation
+    rotationRef.current.x +=
+      (targetRotationRef.current.x - rotationRef.current.x) * dampingFactor;
+    rotationRef.current.y +=
+      (targetRotationRef.current.y - rotationRef.current.y) * dampingFactor;
+
+    // Apply inertia when not rotating
+    if (!isRotating) {
+      targetRotationRef.current.x += velocityRef.current.x;
+      targetRotationRef.current.y += velocityRef.current.y;
+
+      // Dampen velocity
+      velocityRef.current.x *= 0.95;
+      velocityRef.current.y *= 0.95;
+
+      // Clamp
+      targetRotationRef.current.x = Math.max(
+        -Math.PI / 2,
+        Math.min(Math.PI / 2, targetRotationRef.current.x)
+      );
+    }
+
+    // Update camera position
     const radius = 80;
     camera.position.x =
       radius *
