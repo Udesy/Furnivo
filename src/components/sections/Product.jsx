@@ -477,7 +477,7 @@ function ManualControls() {
 
       // Update target rotation (not actual rotation)
       targetRotationRef.current.y += deltaX * 0.01;
-      targetRotationRef.current.x += deltaY * 0.01;
+      targetRotationRef.current.x -= deltaY * 0.01;
 
       // Clamp vertical rotation
       targetRotationRef.current.x = Math.max(
