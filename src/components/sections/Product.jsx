@@ -476,8 +476,8 @@ function ManualControls() {
       const deltaY = touch.clientY - lastPosition.y;
 
       // Update target rotation (not actual rotation)
-      targetRotationRef.current.y += deltaX * 0.01;
-      targetRotationRef.current.x -= deltaY * 0.01;
+      targetRotationRef.current.y -= deltaX * 0.01;
+      targetRotationRef.current.x += deltaY * 0.01;
 
       // Clamp vertical rotation
       targetRotationRef.current.x = Math.max(
