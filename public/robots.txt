@@ -1,5 +1,5 @@
 # Furnivo Robots.txt
-# https://furnivo.com/robots.txt
+# https://furnivo-gold.vercel.app/robots.txt
 
 User-agent: *
 Allow: /
