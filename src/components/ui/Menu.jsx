@@ -40,12 +40,12 @@ const Menu = ({ isOpen, onClose }) => {
     >
       <div className="relative w-full h-full flex flex-col justify-between gap-y-52">
         <nav className=" h-full flex items-center">
-          <ul className="flex flex-col">
+          <ul className="flex flex-col gap-[clamp(0rem,calc(-0.136rem+0.682vw),0.375rem)]">
             {mobile_navigation.map(({ id, href, name }) => (
               <li key={id}>
                 <Link
                   href={href}
-                  className="text-[clamp(2.00rem,calc(1.305rem+2.927vw),3.50rem)]"
+                  className="text-[clamp(2.25rem,calc(1.795rem+2.273vw),3.50rem)]"
                   onClick={() => onClose()}
                 >
                   {name}
