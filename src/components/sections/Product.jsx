@@ -1,3 +1,5 @@
+//Original Working Code
+
 // // "use client";
 
 // // import React, {
@@ -428,13 +430,14 @@ import React, {
   useState,
   useEffect,
 } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
-import { OrbitControls, useGLTF, Html } from "@react-three/drei";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useGLTF, Html } from "@react-three/drei";
 import Image from "next/image";
 import CTAButton from "../ui/CTAButton";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import * as THREE from "three";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -443,56 +446,129 @@ function Model({ model }) {
   return <primitive object={scene} scale={model.scale} />;
 }
 
-// Custom component to force OrbitControls to work with touch
-function ControlsWithTouch({ controlRef }) {
-  const { gl } = useThree();
+// Manual touch-enabled controls
+function ManualControls() {
+  const { camera, gl } = useThree();
+  const [isRotating, setIsRotating] = useState(false);
+  const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
+  const rotationRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    // Force the canvas to accept touch events
     const canvas = gl.domElement;
+
+    const handleTouchStart = (e) => {
+      e.preventDefault();
+      setIsRotating(true);
+      const touch = e.touches[0];
+      setLastPosition({ x: touch.clientX, y: touch.clientY });
+      console.log("👆 Touch START");
+    };
+
+    const handleTouchMove = (e) => {
+      e.preventDefault();
+      if (!isRotating || !e.touches.length) return;
+
+      const touch = e.touches[0];
+      const deltaX = touch.clientX - lastPosition.x;
+      const deltaY = touch.clientY - lastPosition.y;
+
+      // Update rotation
+      rotationRef.current.y += deltaX * 0.01;
+      rotationRef.current.x += deltaY * 0.01;
+
+      // Clamp vertical rotation
+      rotationRef.current.x = Math.max(
+        -Math.PI / 2,
+        Math.min(Math.PI / 2, rotationRef.current.x)
+      );
+
+      setLastPosition({ x: touch.clientX, y: touch.clientY });
+      console.log("🖐️ Touch MOVE", deltaX, deltaY);
+    };
+
+    const handleTouchEnd = (e) => {
+      e.preventDefault();
+      setIsRotating(false);
+      console.log("👋 Touch END");
+    };
+
+    // Mouse events for desktop
+    const handleMouseDown = (e) => {
+      setIsRotating(true);
+      setLastPosition({ x: e.clientX, y: e.clientY });
+      console.log("🖱️ Mouse DOWN");
+    };
+
+    const handleMouseMove = (e) => {
+      if (!isRotating) return;
+
+      const deltaX = e.clientX - lastPosition.x;
+      const deltaY = e.clientY - lastPosition.y;
+
+      rotationRef.current.y += deltaX * 0.01;
+      rotationRef.current.x += deltaY * 0.01;
+
+      rotationRef.current.x = Math.max(
+        -Math.PI / 2,
+        Math.min(Math.PI / 2, rotationRef.current.x)
+      );
+
+      setLastPosition({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleMouseUp = () => {
+      setIsRotating(false);
+      console.log("🖱️ Mouse UP");
+    };
+
+    // Add listeners
+    canvas.addEventListener("touchstart", handleTouchStart, { passive: false });
+    canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
+    canvas.addEventListener("touchend", handleTouchEnd, { passive: false });
+    canvas.addEventListener("mousedown", handleMouseDown);
+    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("mouseup", handleMouseUp);
+    canvas.addEventListener("mouseleave", handleMouseUp);
+
     canvas.style.touchAction = "none";
 
-    console.log("🎯 Canvas configured:", canvas);
-    console.log("   Touch action:", canvas.style.touchAction);
-    console.log("   Has touch:", "ontouchstart" in window);
+    console.log("✅ Manual controls attached");
 
     return () => {
-      canvas.style.touchAction = "auto";
+      canvas.removeEventListener("touchstart", handleTouchStart);
+      canvas.removeEventListener("touchmove", handleTouchMove);
+      canvas.removeEventListener("touchend", handleTouchEnd);
+      canvas.removeEventListener("mousedown", handleMouseDown);
+      canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("mouseup", handleMouseUp);
+      canvas.removeEventListener("mouseleave", handleMouseUp);
     };
-  }, [gl]);
+  }, [gl, isRotating, lastPosition]);
 
-  return (
-    <OrbitControls
-      ref={controlRef}
-      enabled={true}
-      minDistance={30}
-      maxDistance={100}
-      enableDamping={true}
-      dampingFactor={0.05}
-      enableZoom={true}
-      enableRotate={true}
-      enablePan={true}
-      rotateSpeed={1.0}
-      touches={{
-        ONE: 2,
-        TWO: 3,
-      }}
-      makeDefault
-      onStart={() => console.log("🎬 OrbitControls STARTED")}
-      onChange={() => console.log("🔄 OrbitControls CHANGED")}
-      onEnd={() => console.log("🛑 OrbitControls ENDED")}
-    />
-  );
+  // Apply rotation to camera
+  useFrame(() => {
+    const radius = 80;
+    camera.position.x =
+      radius *
+      Math.sin(rotationRef.current.y) *
+      Math.cos(rotationRef.current.x);
+    camera.position.y = 40 + radius * Math.sin(rotationRef.current.x);
+    camera.position.z =
+      radius *
+      Math.cos(rotationRef.current.y) *
+      Math.cos(rotationRef.current.x);
+    camera.lookAt(0, 0, 0);
+  });
+
+  return null;
 }
 
 export default function Product({ data }) {
-  const controlRef = useRef(null);
   const [grabbing, setGrabbing] = useState(false);
   const [path, setPath] = useState(data?.[0].modelFile || null);
   const [model, setModel] = useState(data?.[0] || null);
   const textRef = useRef(null);
   const sectionRef = useRef(null);
-  const canvasRef = useRef(null);
 
   const handleClick = (selectedModel) => {
     setModel(selectedModel);
@@ -544,7 +620,6 @@ export default function Product({ data }) {
       </div>
       <div className="w-full h-fit flex lg:flex-row flex-col gap-[clamp(2rem,calc(-9.636rem+18.182vw),4rem)] mt-[clamp(48px,calc(36.364px+3.636vi),80px)] bg-primary px-[clamp(1.5rem,calc(0.773rem+3.636vi),3.5rem)] py-[clamp(2.5rem,calc(1.955rem+2.727vw),4rem)]">
         <div
-          ref={canvasRef}
           className="lg:h-[42rem] md:h-[36rem] h-[24rem] w-full bg-secondary overflow-hidden rounded-[10px]"
           style={{
             touchAction: "none",
@@ -584,7 +659,7 @@ export default function Product({ data }) {
               {path && <Model model={model} />}
             </Suspense>
 
-            <ControlsWithTouch controlRef={controlRef} />
+            <ManualControls />
           </Canvas>
         </div>
 
