@@ -479,10 +479,6 @@ function ManualControls() {
       targetRotationRef.current.y += deltaX * 0.01;
       targetRotationRef.current.x += deltaY * 0.01;
 
-      // Store velocity for inertia
-      velocityRef.current.x = deltaY * 0.01;
-      velocityRef.current.y = deltaX * 0.01;
-
       // Clamp vertical rotation
       targetRotationRef.current.x = Math.max(
         -Math.PI / 2,
@@ -513,7 +509,7 @@ function ManualControls() {
       const deltaY = e.clientY - lastPosition.y;
 
       targetRotationRef.current.y += deltaX * 0.01;
-      targetRotationRef.current.x += deltaY * 0.01;
+      targetRotationRef.current.x -= deltaY * 0.01;
 
       velocityRef.current.x = deltaY * 0.01;
       velocityRef.current.y = deltaX * 0.01;
