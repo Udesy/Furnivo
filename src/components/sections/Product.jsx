@@ -453,7 +453,6 @@ function ManualControls() {
   const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
   const rotationRef = useRef({ x: 0, y: 0 });
   const targetRotationRef = useRef({ x: 0, y: 0 }); // Smooth target
-  const velocityRef = useRef({ x: 0, y: 0 }); // For inertia
 
   useEffect(() => {
     const canvas = gl.domElement;
@@ -463,8 +462,6 @@ function ManualControls() {
       setIsRotating(true);
       const touch = e.touches[0];
       setLastPosition({ x: touch.clientX, y: touch.clientY });
-      velocityRef.current = { x: 0, y: 0 }; // Reset velocity
-      console.log("👆 Touch START");
     };
 
     const handleTouchMove = (e) => {
@@ -491,15 +488,12 @@ function ManualControls() {
     const handleTouchEnd = (e) => {
       e.preventDefault();
       setIsRotating(false);
-      console.log("👋 Touch END");
     };
 
     // Mouse events for desktop
     const handleMouseDown = (e) => {
       setIsRotating(true);
       setLastPosition({ x: e.clientX, y: e.clientY });
-      velocityRef.current = { x: 0, y: 0 };
-      console.log("🖱️ Mouse DOWN");
     };
 
     const handleMouseMove = (e) => {
@@ -511,9 +505,6 @@ function ManualControls() {
       targetRotationRef.current.y += deltaX * 0.01;
       targetRotationRef.current.x -= deltaY * 0.01;
 
-      velocityRef.current.x = deltaY * 0.01;
-      velocityRef.current.y = deltaX * 0.01;
-
       targetRotationRef.current.x = Math.max(
         -Math.PI / 2,
         Math.min(Math.PI / 2, targetRotationRef.current.x)
@@ -524,7 +515,6 @@ function ManualControls() {
 
     const handleMouseUp = () => {
       setIsRotating(false);
-      console.log("🖱️ Mouse UP");
     };
 
     // Add listeners
@@ -537,8 +527,6 @@ function ManualControls() {
     canvas.addEventListener("mouseleave", handleMouseUp);
 
     canvas.style.touchAction = "none";
-
-    console.log("✅ Manual controls attached");
 
     return () => {
       canvas.removeEventListener("touchstart", handleTouchStart);
@@ -560,22 +548,6 @@ function ManualControls() {
       (targetRotationRef.current.x - rotationRef.current.x) * dampingFactor;
     rotationRef.current.y +=
       (targetRotationRef.current.y - rotationRef.current.y) * dampingFactor;
-
-    // Apply inertia when not rotating
-    if (!isRotating) {
-      targetRotationRef.current.x += velocityRef.current.x;
-      targetRotationRef.current.y += velocityRef.current.y;
-
-      // Dampen velocity
-      velocityRef.current.x *= 0.95;
-      velocityRef.current.y *= 0.95;
-
-      // Clamp
-      targetRotationRef.current.x = Math.max(
-        -Math.PI / 2,
-        Math.min(Math.PI / 2, targetRotationRef.current.x)
-      );
-    }
 
     // Update camera position
     const radius = 80;
@@ -658,7 +630,7 @@ export default function Product({ data }) {
           }}
         >
           <Canvas
-            camera={{ position: [0, 40, 80], fov: 45 }}
+            camera={{ position: [0, 0, -10], fov: 50 }}
             gl={{
               preserveDrawingBuffer: true,
               antialias: true,

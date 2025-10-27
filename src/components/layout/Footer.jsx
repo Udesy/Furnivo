@@ -58,10 +58,10 @@ const Footer = () => {
         <div className="relative bottom-0 flex flex-col gap-2 mt-[clamp(7.5rem,calc(5.415rem+8.78vw),12rem)]">
           <div className="bg-primary rounded-[10px] flex flex-col justify-between overflow-hidden gap-40">
             <div className="flex flex-row justify-between p-[clamp(0.5rem,calc(0.268rem+0.976vw),1rem)]">
-              <h2 className="text-[clamp(0.88rem,calc(0.224rem+2.368vw),2.00rem)] leading-[125%] min-w-[20ch]">
+              <h2 className="text-[clamp(0.69rem,calc(-0.012rem+2.683vw),2.00rem)] leading-[125%] max-w-[25ch]">
                 Crafting premium furniture with timeless elegance.
               </h2>
-              <div className="flex flex-row gap-[clamp(0.5rem,calc(0.037rem+1.951vw),1.5rem)] w-fit h-fit">
+              <div className="flex flex-row gap-[clamp(0.3rem,calc(0.037rem+1.951vw),1.5rem)] w-fit h-fit">
                 {social_icon.map(({ id, name, Icon }) => (
                   <a
                     key={id}
