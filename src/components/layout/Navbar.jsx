@@ -66,7 +66,7 @@ const Navbar = () => {
     <>
       <header
         className={clsx(
-          "fixed w-full z-100 top-0 left-0 flex justify-center items-center py-4 px-8 transition-transform duration-300",
+          "fixed w-full z-100 top-0 left-0 flex justify-center items-center py-4 px-[clamp(1.5rem,calc(0.773rem+3.636vi),3.5rem)] transition-transform duration-300",
           isVisible ? "translate-y-0" : "-translate-y-full"
         )}
       >
